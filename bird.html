@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js"></script>
+    <style>
+        .zdog-canvas {
+  background: #FDB;
+  cursor: move;
+}
+    </style>
+</head>
+  <body>
+    <canvas class="zdog-canvas" width="240" height="240"></canvas>
+  </body>
+  <script>
+    // zdog-demo.js
+
+    // create illo
+    let illo = new Zdog.Illustration({
+      // set canvas with selector
+      element: ".zdog-canvas",
+      dragRotate: true,
+      zoom: 0.5
+    });
+
+    // add circle
+    let body = new Zdog.Shape({
+      addTo: illo,
+      path: [{ x: -60 }, { x: 60 }],
+      stroke: 100,
+      color: "#00f"
+    });
+    let headGroup = new Zdog.Group({
+        addTo: body,
+        translate: { x: -48, y: -75 }
+    })
+
+  
+    let beak = new Zdog.Cone({
+      addTo: headGroup,
+      diameter: 70,
+      length: 90,
+      stroke: 20,
+    //   stroke: false,
+      color: "#9a0",
+      backface: "#C25"
+    });
+    let head = new Zdog.Shape({
+      addTo: headGroup,
+      stroke: 100,
+      color : "#f00"
+    });
+
+    let feetGroup = new Zdog.Group({
+        addTo: body,
+        
+    })
+ 
+var zCircle = new Zdog.Ellipse({
+  addTo: feetGroup,
+  diameter: 20,
+  quarters: 2,
+  closed: true,
+  translate: { y: 80 },
+  rotate:{ y:Zdog.TAU/2 , x:Zdog.TAU/4 },
+  scale: 2,
+  stroke: 8,
+  fill: true,
+  color: "#ff0"
+  });
+// z line
+new Zdog.Shape({
+  addTo: zCircle,
+  path: [ {}, zCircle.translate.copy()],
+  rotate: { x:Zdog.TAU/-4},
+  scale: 1/zCircle.scale.z,
+  stroke: 2,
+  color: "#ff0"
+
+//   color: zCircle.color,
+});
+ 
+let feetGroupOther = feetGroup.copyGraph({
+        translate: {x:20,z:20}
+    })
+
+    // update & render
+    function animate() {
+      illo.updateRenderGraph();
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</html>
